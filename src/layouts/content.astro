@@ -1,0 +1,66 @@
+---
+import Header from "../fragments/Header.astro";
+import Footer from "../fragments/Footer.astro";
+---
+
+<div id="frame">
+	<Header />
+	<main>
+		<slot />
+	</main>
+	<Footer />
+</div>
+
+<style is:global>
+	#frame {
+		& {
+			display: flex;
+			flex-direction: column;
+
+			min-height: 100vh;
+		}
+
+		& > header { flex: 0 0 auto; }
+		& > main {
+			& {
+				flex: 1 0 auto;
+
+				width: 100%;
+				display: grid;
+
+				--max-width: 100%;
+				--side-width: 6rem;
+
+				grid-auto-rows: max-content;
+				grid-template-columns:
+					[total-start]
+					minmax(0px, 1fr)
+					[large-start]
+					minmax(0px, var(--side-width))
+					[short-start]
+					max(min(768px, 100%), var(--max-width) - var(--side-width))
+					[short-end]
+					minmax(0px, var(--side-width))
+					[large-end]
+					minmax(0px, 1fr)
+					[total-start];
+			}
+
+			
+			& > *{ 
+				grid-column: short;
+			}
+			& > *[data-col="large"] { grid-column: large; }
+			& > *[data-col="total"] { grid-column: total; }
+
+			@media (width > 0768px) { --max-width: 0768px; }
+			@media (width > 0992px) { --max-width: 0992px; }
+			@media (width > 1200px) { --max-width: 1200px; }
+		}
+
+		& > footer {
+			flex: 0 0 auto;
+			margin-top: 2.5rem;
+		}
+	}
+</style>

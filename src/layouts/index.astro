@@ -1,0 +1,114 @@
+---
+import { screen_themes } from '../util/const'
+
+export type Props = {
+	title: string;
+	description: string;
+};
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+		<title>{title}</title>
+		<meta name="title" content={title} />
+		<meta name="description" content={description} />
+
+		<slot name="meta" />
+
+		<script define:vars={{ screen_themes }}>
+			(function(){
+				const theme = localStorage?.getItem("theme") ? 
+					localStorage.getItem("theme") : window.matchMedia("(prefers-color-scheme: dark)").matches? 
+						screen_themes.d : screen_themes.l;
+										
+				document.documentElement.classList.toggle("dark", theme === screen_themes.d);
+				window.localStorage.setItem("theme", theme);
+			})();
+		</script>
+	</head>
+	<body>
+		<slot />
+	</body>
+</html>
+<style>
+	:root {
+		color-scheme: light dark;
+	}
+	html {
+		/* in order to maintain transparency, most color codes used here come from the official color definitions of tailwind. check: https://tailwindcss.com/docs/customizing-colors */
+		& {
+			margin: 0;
+			padding: 0;
+			font-family: system-ui, sans-serif;
+			
+			scroll-behavior: smooth;
+			color : var(--hierarchy-0); 
+		}
+
+		&:not(.dark) {
+			--hierarchy-s : #000000;
+			--hierarchy-0 : #111827;
+			--hierarchy-1 : #4b5563;
+			--hierarchy-2 : #64748b;
+			--hierarchy-3 : #94a3b8;
+
+			--bg-body : #e4e4e7;
+			--panel-color : #b4bae0;
+			--block-color : #cbd5e1;
+		}
+		&.dark { 
+			--hierarchy-s : #ffffff;
+			--hierarchy-0 : #f1f5f9;
+			--hierarchy-1 : #94a3b8;
+			--hierarchy-2 : #64748b;
+			--hierarchy-3 : #3f3f46;
+
+			--bg-body : #27272a;
+			--panel-color : #080d10; 
+			--block-color : #38383a; 
+		}
+	}
+	body { 
+		margin: 0;
+		padding: 0;
+		background-color: var(--bg-body);
+	}
+</style>
+<style is:global>
+.sr-only {
+	position: absolute;
+	width: 0px;
+	height: 0px;
+	padding: 0;
+	overflow: hidden;
+	border-width: 0;
+}
+html:not(.dark) .th-visible[data-theme="dark"] { display: none; }
+html.dark .th-visible[data-theme="light"] { display: none; }
+
+* {
+	box-sizing: border-box;
+	padding: 0;
+}
+
+a {
+	color : currentColor;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+p { margin:0; }
+p:not(:last-child) { margin-bottom: 1em; }
+p:not(:first-child) { margin-top: 1em; }
+
+header > :where(h1,h2,h3,h4,h5,h6) {
+	margin-block: 0;
+}
+</style>

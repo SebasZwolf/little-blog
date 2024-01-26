@@ -1,50 +1,159 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import {
+	SITE_TITLE as title,
+	SITE_DESCRIPTION as description,
+} from "../util/const";
+
+import OpenGraph from "../fragments/OpenGraph.astro";
+import Layout from "../layouts/index.astro";
+import Content from "../layouts/content.astro";
+
+import Time from "../components/Time.astro";
+import { getCollection } from "astro:content";
+
+const s_postImg = [64, 64];
+
+const posts = await getCollection('blog').then(ps => ps.sort((a, b) => a.data.datePub.valueOf() - b.data.datePub.valueOf()));
+
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header title={SITE_TITLE} />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to build
-				a personal website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/pages/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to <a href="https://docs.astro.build/"
-					>read the docs
-				</a> or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out <a
-					href="https://github.com/Charca/astro-blog-template"
-					>astro-blog-template
-				</a> by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
-</html>
+<Layout {...{ title, description }}>
+	<Fragment slot="head">
+		<OpenGraph {...{title, description, image : 'public/favicon.svg' }}/>
+	</Fragment>
+	<Fragment>
+		<Content>
+			<header style="margin-block: 1em;">
+				<h1>Hola, soy Sebas</h1>
+			</header>
+			<section style="margin-block: 0 2.5rem">
+				<header style="margin-block: 1em;">
+					<h2>Y este es mi blog</h2>
+				</header>
+				<p style="max-width: 72ch;">
+					Mi nombre es Sebastian Rodríguez y mi numero favorito es el doce,<i> de
+					ahí mi nombre Zwölf (que es 12 en alemán)</i>. Creé este blog para 
+					enseñar como a desarrollar páginas web usando trucos y practicas que
+					aprendí a lo largo del tiempo.
+				</p>
+				<p style="max-width: 72ch;">
+					Aquí aprenderas como crear elementos de UI que siempre son un dolor de
+					cabeza al momento de empezar un nuevo proyecto, así como la forma en
+					la que yo organizo mi código para mayor facilidad al leer, consumir y
+					refactorizar.
+				</p>
+				<p style="max-width: 72ch;">
+					Los frameworks que yo uso principalmente son Astro, Vue y Tailwind,
+					pero para la mayoria de guias que verás aquí, lo más importante es
+					limitar el uso de javascript al minimo y aprovechar al máximo las
+					herramientas del vanilla css.
+				</p>
+				<p style="max-width: 72ch;">
+					Los frameworks que yo uso principalmente son Astro, Vue y Tailwind,
+					pero para la mayoria de guias que verás aquí, lo más importante es
+					limitar el uso de javascript al minimo y aprovechar al máximo las
+					herramientas del vanilla css.
+				</p>
+			</section>
+
+			<section style="margin-block: 2.5rem">
+				<header style="margin-block: 1em">
+					<h2 style="margin-bottom: 0;">Últimos Articulos</h2>
+					<small style="color: var(--hierarchy-1)"
+						><a href="/blog">ver todos</a></small
+					>
+				</header>
+
+				<ul class="ul-post-list-lite">
+					{
+						posts.map(p => (
+							<li>
+								<a href={`/blog/${p.slug}`}>
+									<article class="article-post-card-lite">
+										<picture>
+											<img
+												style="display: block; border-radius: 50%; width: 100%; height: 100%;"
+												src={`https://images.placeholders.dev/?width=${s_postImg[0]}&height=${s_postImg[1]}`}
+												width={s_postImg[0]}
+												height={s_postImg[1]}
+												alt=""
+											/>
+										</picture>
+
+										<header>
+											<h3>{p.data.title}</h3>
+											<Time date={p.data.datePub} format={{ month: "long" }} />
+										</header>
+									</article>
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</section>
+		</Content>
+	</Fragment>
+</Layout>
+
+<style>
+	ul.ul-post-list-lite {
+		& {
+			list-style: none;
+			padding: 0;
+			display: flex;
+			flex-direction: column;
+			gap: 0.5rem;
+		}
+		& > li {
+			display: block;
+			max-width: 72ch;
+		}
+	}
+
+	article.article-post-card-lite {
+		& {
+			padding: 0.5rem;
+
+			display: grid;
+			grid-template-areas: "picture header";
+
+			--img-size: 3.75rem;
+			grid-template-columns: var(--img-size) 1fr;
+			grid-template-rows: var(--img-size);
+
+			gap: 0.75rem;
+			align-items: center;
+		}
+
+		&:hover {
+			background-color: var(--hierarchy-3);
+		}
+
+		& > picture {
+			grid-area: picture;
+			overflow: hidden;
+		}
+		& > p {
+			grid-area: content;
+			margin: 0;
+			text-wrap: pretty;
+			overflow: hidden;
+		}
+
+		& > header {
+			& {
+				line-height: 1;
+				grid-area: header;
+			}
+			& > :first-child {
+				margin-block: 0.25rem;
+			}
+			& > :global(:last-child) {
+				margin-block: 0.25rem;
+				font-size: small;
+				line-height: 1;
+				color: var(--hierarchy-1);
+			}
+		}
+	}
+</style>

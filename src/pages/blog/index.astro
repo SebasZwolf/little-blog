@@ -1,111 +1,181 @@
 ---
-import BaseHead from '../../components/BaseHead.astro';
-import Header from '../../components/Header.astro';
-import Footer from '../../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
+import OpenGraph from '../../fragments/OpenGraph.astro';
+import Layout from '../../layouts/index.astro'
+import Content from '../../layouts/content.astro'
+import { SITE_TITLE as title, SITE_DESCRIPTION as description } from '../../util/const';
+
 import { getCollection } from 'astro:content';
-import FormattedDate from '../../components/FormattedDate.astro';
 
-const posts = (await getCollection('blog')).sort(
-	(a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf()
-);
+import Time from '../../components/Time.astro';
+import Icons from '../../fragments/Icons.astro';
+
+const posts = (await getCollection('blog')).sort((a, b) => a.data.datePub.valueOf() - b.data.datePub.valueOf());
+
+const s_postImg = [64,64];
 ---
-
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<style>
-			main {
-				width: 960px;
-			}
-			ul {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 2rem;
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
-			}
-			ul li {
-				width: calc(50% - 1rem);
-			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
-			}
-			ul li:first-child img {
-				width: 100%;
-			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
-			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
-			}
-			ul li a {
-				display: block;
-			}
-			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
-			}
-			.date {
-				margin: 0;
-				color: rgb(var(--gray));
-			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
-				}
-				ul li {
-					width: 100%;
-					text-align: center;
-				}
-				ul li:first-child {
-					margin-bottom: 0;
-				}
-				ul li:first-child .title {
-					font-size: 1.563em;
-				}
-			}
-		</style>
-	</head>
-	<body>
-		<Header />
-		<main>
+<Layout {...{title, description}}>
+	<Fragment slot="head">
+		<OpenGraph {...{title, description, image : 'public/favicon.svg' }}/>
+	</Fragment>
+	<Fragment>
+		<Content>
+			<h1>Todos los articulos</h1>
+			<Icons/>
 			<section>
-				<ul>
-					{
-						posts.map((post) => (
-							<li>
-								<a href={`/blog/${post.slug}/`}>
-									<img width={720} height={360} src={post.data.heroImage} alt="" />
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
-								</a>
-							</li>
-						))
-					}
-				</ul>
+				<ul class="ul-post-list">{
+					posts.map((p, i) => <li>
+						<article class="article-post-card">
+							<div>
+								<img style="display: block; width: 100%; height: auto; aspect-ratio: 1.25; object-fit: cover;" src={`https://images.placeholders.dev/?width=${s_postImg[0]}&height=${s_postImg[1]}`} width={s_postImg[0]} height={s_postImg[1]} alt=""/>	
+								<img style="display: block; position: absolute; top: 50%; left: 50%; translate: -50% -50%; border-radius: 50%; border: 1px solid black;" src={`https://images.placeholders.dev/?width=${s_postImg[0]}&height=${s_postImg[1]}`} width={s_postImg[0]} height={s_postImg[1]} alt=""/>		
+							</div>
+
+							<div>
+								<footer>
+									<ul class="ul-tag-list-lite">{
+										p.data.tags.map(t => (
+										<li style={`--icon-color : ${t[1].color}`}>
+											<svg><use href={`#icon-tag-${t[0]}`}/></svg>
+											<div>
+												<span>
+													{t[1].label}
+												</span>
+											</div>
+										</li>))
+									}</ul>	
+								</footer>
+								<header>
+									<h3>{p.data.title}</h3>
+									<Time date={p.data.datePub}/>
+								</header>
+								<p class="block-post-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi ipsam odit, delectus molestias at ab dicta quo iusto nesciunt reprehenderit illo dolorum soluta et quas consequatur? Doloribus sequi nulla nisi?</p>
+								
+								<div style="text-align: center; margin-top: 2.5rem">
+									<a class="link-post-cta" href={`/blog/${p.slug}`}>Leer más</a>	
+								</div>
+							</div>
+						</article>
+					</li>)
+				}</ul>
 			</section>
-		</main>
-		<Footer />
-	</body>
-</html>
+		</Content>	
+	</Fragment>
+</Layout>
+
+<style>
+	ul.ul-post-list {
+		& {
+
+			list-style: none;
+			padding: 0;
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(18rem, 22rem));
+			gap : .5rem;
+			justify-content: center;
+		}
+		& > li {
+			display: block;
+		}
+	}
+
+	article.article-post-card {
+		& {
+			background-color: var(--block-color);
+		}
+
+		& > :first-child {
+			position: relative;
+		}
+
+		& > :last-child {
+			padding: .5rem;;
+		}
+
+		& header {
+			& { 
+				line-height: 1.25;
+				font-size: 18px;
+				margin-block: .5rem;
+			}
+			& > :first-child {
+				min-height: calc(1.25 * 1em * 2);
+				display: flex;
+				align-items: flex-end;
+			}
+			& > :global(:last-child) {
+				margin-block: .25rem;
+				font-size: small;
+				line-height: 1;
+				color: var(--hierarchy-2);
+				font-weight: bold;
+			}
+		}
+
+		& p.block-post-desc {
+			font-size : 14px;
+			color: var(--hierarchy-0);
+			line-height: 1.25;
+			max-height: calc(1.25 * 1em * 4);
+			overflow: clip;
+		}
+
+		& a.link-post-cta {
+			& {
+				display: inline-block;
+				padding: .25rem 1rem;
+				font-size: 14px;
+				background-color: #48f4;
+
+				transition: scale .3s, background-color .3s;
+			}
+			&:hover {
+				scale : 1.15;
+				background-color: #48fa;
+			}
+		}
+	}
+
+	ul.ul-tag-list-lite {
+		& {
+			display: flex;
+			padding: 0;
+			list-style: none;
+			gap: .25rem;
+			margin-bottom: .5rem;
+		}
+
+		& > li {
+			line-height: 1;
+			color: var(--hierarchy-s);	
+			padding: .25rem;
+			background-color: color-mix(in srgb, var(--icon-color), transparent 50%);
+			
+			border-radius: 100vw;
+			font-size: small;
+
+			display: flex;
+			align-items: center;
+		}
+		& > li > svg {
+			width: 16px;
+			aspect-ratio: 1;
+		}
+
+		& > li > div {
+			display: grid;
+			transition: grid-template-columns .3s, padding-right .3s;
+			grid-template-columns: 0fr;
+			overflow: hidden;
+		}
+		& > li:hover > div {
+			grid-template-columns: 1fr;
+			padding-right: .25rem;
+		}
+		& > li > div > span {
+			overflow: hidden;
+			line-height: 1.25;
+			text-transform: lowercase;
+		}
+	}
+
+</style>
