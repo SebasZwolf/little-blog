@@ -16,16 +16,16 @@ export async function getStaticPaths() {
 type Props = CollectionEntry<'blog'>;
 
 const { Content : PostContent, } = await Astro.props.render();
-const { datePub, description, title, dateUpd, thumbnail} = Astro.props.data;
+const { desc : description, title, thumbnail} = Astro.props.data;
 ---
 
-<Layout {...{title, description}}>
+<Layout {title} {description}>
 	<Fragment slot="head">
-		<OpenGraph {...{title, description, image : 'public/favicon.svg' }}/>
+		<OpenGraph {title} {description} image={ thumbnail?.img.src ?? "public/favicon.svg" }/>
 	</Fragment>
 	<Fragment>
 		<Content>
-			<h1>{title}</h1>
+			<h1 set:text={title}></h1>
 			<div class="blog-layout">
 				<PostContent/>
 			</div>
@@ -34,10 +34,18 @@ const { datePub, description, title, dateUpd, thumbnail} = Astro.props.data;
 </Layout>
 
 <style is:global>
+	html:not(.dark) .blog-layout {
+		--emphasis : #038;
+	}
+	html.dark .blog-layout {
+		--emphasis : #4bf;
+	}
+
 	.blog-layout {
 		& {
 			line-height: 1.5;
 		}
+
 
 		& pre:has(> code:only-child) {
 			& {
@@ -45,6 +53,7 @@ const { datePub, description, title, dateUpd, thumbnail} = Astro.props.data;
 				border-radius: .5rem;
 				border: 1px solid white;
 			}
+
 
 			& > code {
 				tab-size: 2;
@@ -64,7 +73,7 @@ const { datePub, description, title, dateUpd, thumbnail} = Astro.props.data;
 			}
 		}
 		& :not(pre) > code {
-			padding: .0rem .25rem;
+			padding: .125rem .25rem;
 			background-color: #8886;
 			border-radius: .25rem;
 		}
@@ -86,6 +95,19 @@ const { datePub, description, title, dateUpd, thumbnail} = Astro.props.data;
 
 		& ul {
 			padding-left: 1rem;
+		}
+
+		& strong {
+			font-weight: 500;
+			color : var(--hierarchy-s);
+		}
+
+		& abbr {
+			text-decoration: none;
+
+			font-weight: bold;
+			color: var(--emphasis);
+			cursor: help;
 		}
 	}
 </style>

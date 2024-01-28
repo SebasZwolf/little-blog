@@ -10,8 +10,10 @@ import Content from "../layouts/content.astro";
 
 import Time from "../components/Time.astro";
 import { getCollection } from "astro:content";
+import { Image } from "astro:assets";
+import Icons from "../fragments/Icons.astro";
 
-const s_postImg = [64, 64];
+const s_postImg = 96;
 
 const posts = await getCollection('blog').then(ps => ps.sort((a, b) => a.data.datePub.valueOf() - b.data.datePub.valueOf()));
 
@@ -26,6 +28,7 @@ const posts = await getCollection('blog').then(ps => ps.sort((a, b) => a.data.da
 			<header style="margin-block: 1em;">
 				<h1>Hola, soy Sebas</h1>
 			</header>
+			<Icons/>
 			<section style="margin-block: 0 2.5rem">
 				<header style="margin-block: 1em;">
 					<h2>Y este es mi blog</h2>
@@ -44,9 +47,9 @@ const posts = await getCollection('blog').then(ps => ps.sort((a, b) => a.data.da
 				</p>
 				<p style="max-width: 72ch;">
 					Los frameworks que yo uso principalmente son Astro, Vue y Tailwind,
-					pero para la mayoria de guias que verás aquí, lo más importante es
-					limitar el uso de javascript al minimo y aprovechar al máximo las
-					herramientas del vanilla css.
+					pero en la mayoría de guias que verás aquí, el uso de javascript (de
+					frameworks y la misma vanilla js) se mantiene al mínimo, pues el
+					objetivo es aprovechar al máximo las herramientas del vanilla css.
 				</p>
 				<p style="max-width: 72ch;">
 					Los frameworks que yo uso principalmente son Astro, Vue y Tailwind,
@@ -69,18 +72,31 @@ const posts = await getCollection('blog').then(ps => ps.sort((a, b) => a.data.da
 						posts.map(p => (
 							<li>
 								<a href={`/blog/${p.slug}`}>
-									<article class="article-post-card-lite">
-										<picture>
-											<img
-												style="display: block; border-radius: 50%; width: 100%; height: 100%;"
-												src={`https://images.placeholders.dev/?width=${s_postImg[0]}&height=${s_postImg[1]}`}
-												width={s_postImg[0]}
-												height={s_postImg[1]}
-												alt=""
-											/>
+									<article class="article-post-card-lite" style={`--img-size: ${s_postImg}px`}>
+										<picture style="height: 100%; border-radius: 50%;">
+											{p.data.thumbnail && <Image
+												style="display: block; overflow: hidden; width: 100%; height: 100%; object-fit: cover;"
+												src={p.data.thumbnail?.img}
+												alt={p.data.thumbnail?.alt}
+												width={s_postImg}
+												height={s_postImg}
+											/>}
 										</picture>
 
 										<header>
+											<div style="margin-block: .5rem;">
+												<ul class="ul-tag-list-lite">{
+													p.data.tags.map(t => (
+													<li style={`--icon-color : ${t[1].color}`}>
+														<svg viewBox="0 -1 24 24"><use href={`#icon-tag-${t[0]}`}/></svg>
+														<div>
+															<span>
+																{t[1].label}
+															</span>
+														</div>
+													</li>))
+												}</ul>
+											</div>
 											<h3>{p.data.title}</h3>
 											<Time date={p.data.datePub} format={{ month: "long" }} />
 										</header>
@@ -117,29 +133,18 @@ const posts = await getCollection('blog').then(ps => ps.sort((a, b) => a.data.da
 			display: grid;
 			grid-template-areas: "picture header";
 
-			--img-size: 3.75rem;
 			grid-template-columns: var(--img-size) 1fr;
 			grid-template-rows: var(--img-size);
 
 			gap: 0.75rem;
 			align-items: center;
 		}
-
-		&:hover {
-			background-color: var(--hierarchy-3);
-		}
+		&:hover { background-color: var(--hierarchy-3); }
 
 		& > picture {
 			grid-area: picture;
 			overflow: hidden;
 		}
-		& > p {
-			grid-area: content;
-			margin: 0;
-			text-wrap: pretty;
-			overflow: hidden;
-		}
-
 		& > header {
 			& {
 				line-height: 1;
@@ -155,5 +160,56 @@ const posts = await getCollection('blog').then(ps => ps.sort((a, b) => a.data.da
 				color: var(--hierarchy-1);
 			}
 		}
+
+		& > p {
+			grid-area: content;
+			margin: 0;
+			text-wrap: pretty;
+			overflow: hidden;
+		}
+
+		& ul.ul-tag-list-lite {
+			& {
+				display: flex;
+				padding: 0;
+				list-style: none;
+				gap: .25rem;
+				margin-bottom: .5rem;
+			}
+
+			& > li {
+				line-height: 1;
+				color: var(--hierarchy-s);	
+				padding: .25rem;
+				background-color: color-mix(in srgb, var(--icon-color), transparent 50%);
+				
+				border-radius: 100vw;
+				font-size: small;
+
+				display: flex;
+				align-items: center;
+			}
+			& > li > svg {
+				width: 16px;
+				aspect-ratio: 1;
+			}
+
+			& > li > div {
+				display: grid;
+				transition: grid-template-columns .3s, padding-right .3s;
+				grid-template-columns: 0fr;
+				overflow: hidden;
+			}
+			& > li:hover > div {
+				grid-template-columns: 1fr;
+				padding-right: .25rem;
+			}
+			& > li > div > span {
+				overflow: hidden;
+				line-height: 1.25;
+				text-transform: lowercase;
+			}
+		}
+
 	}
 </style>

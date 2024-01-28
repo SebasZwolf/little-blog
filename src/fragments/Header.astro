@@ -23,17 +23,17 @@ const home_links: link[] = [
 				label : 'tutorial de layout',
 				nested : [
 					{
-						label : 'nested',
-						href : '#',
+						label : 'Template de variables CSS',
+						href : '/blog/post-1',
 					},
 					{
-						label : 'nested',
-						href : '#',
+						label : 'Consejos de semántica',
+						href : '/blog/post-2',
 					},
 					{
-						label : 'nested',
-						href : '#',
-					}
+						label : 'Clases de CSS',
+						href : '/blog/post-3',
+					},
 				]
 			},
 		]
@@ -283,7 +283,7 @@ const home_links: link[] = [
 
 			@media (width <= 768px) {
 				& > ul.c-ul-link {
-					min-width: 12rem;
+					min-width: 16rem;
 					position: absolute;
 					top : calc(100% + 1rem);
 					right: 1rem;
@@ -309,7 +309,7 @@ const home_links: link[] = [
 				}
 				& > ul.c-ul-link > li > ul.c-ul-link  {
 					position: absolute;
-					min-width: 12rem;
+					min-width: 16rem;
 
 					top : calc(100% + 1rem);
 					left : 50%;

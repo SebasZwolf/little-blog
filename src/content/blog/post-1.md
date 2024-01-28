@@ -1,9 +1,14 @@
 ---
-title: 'Un diseño básico: diseñar la "identidad"'
-description: 'Lorem ipsum dolor sit amet'
-datePub: 'Jul 08 2022'
-# thumbnail: '/blog-placeholder-3.jpg'
+title: 'Preparación básica: diseñar la "identidad"'
+desc: 'Una propuesta de solución para manejar variables CSS y crear una paleta general de colores que representen una jerarquía.'
+datePub: '2022-07-08T05:00:00.000Z'
+thumbnail:
+ img :  '/post-1.thumbnail.png'
+ alt : 'Ejemplo en código de la definición de variables CSS usando el template recomendado'
 tags : ['css3','astro','html5']
+related:
+  - post-2
+  - post-3
 ---
 
 Lo primero y más importante al crear una página web para una aplicación, un sitio estatico, una SPA o un grupo de páginas, es crear definir un layout básico default para el sitio. Esto incluye definir los colores que se van a usar, como se va distribuir el contenido, las fuentes, etc. En otras palabras, es necesario definir la identidad de lo que se va a crear.
@@ -29,16 +34,17 @@ Casi todas las páginas que crearás van a comenzar así:
 
 Desde aquí todos sabemos lo que hay que hacer, le ponemos un titulo, le agregamos los metatags de descripción y titulo y empezamos a llenar el `<body>` con nuestro contenido.
 
-Continuamos creando el `<header>`,`<main>`,`<footer>` y comenzamos a escribir. Usamos un elemento `<style>` para formatear el ancho maximo del `<main>` y centrar nuestro contenido, coloreamos el `<header>` y el `<footer>`, añadimos los links de navegación, ponemos un icono en el header para que sea bonito y alineamos los iconos a un lado y cuando nos dimos cuenta...
+Continuamos creando el `<header>`,`<main>`,`<footer>`. Usamos un elemento `<style>` para dar formatos básicos como el ancho maximo del `<main>` y centrar nuestro contenido _(o usamos estilos en línea)_, añadimos colores al `<header>` y el `<footer>`, insertamos los links de navegación, ponemos un icono en el header para que sea bonito y alineamos los iconos a un lado y cuando nos dimos cuenta...
 
-Hemos llenado nuestra página de `<div>` y `<span>`, hemos usado estilos en linea para ahorrar crearnos clases y movernos hasta la etiqueta `<style>`, hemos usado codigos de colores diferentes para cada elemento (o hemos usado el mismo, pero usando el <kbd>ctr</kbd>+<kbd>c</kbd> y <kbd>ctr</kbd>+<kbd>v</kbd> hasta el cansancio).
+Hemos llenado nuestra página de etiquetas `<div>` y `<span>`, hemos usado estilos en línea o nos llenamos de nombres de clases incomprenisbles y _casí_ aleatorias dentro la etiqueta `<style>`, hemos usado códigos de colores diferentes para cada elemento (o el mismo, solo que haciendo <kbd>ctrl</kbd>+<kbd>c</kbd> y <kbd>ctrl</kbd>+<kbd>v</kbd> en todos lados).
 
 ## Un layout básico
 
-Para fácilitar el gestionar la _sensación de identidad_ de la página, se puede usar las variables de CSS. Los ejemplos que mostraré a continuación son hechos en astro, pero se pueden adaptar al uso de cualquier framework que trabaje sobre HTML.
+Para fácilitar el gestionar la *sensación de identidad* de la página, se puede usar las variables de CSS. Los ejemplos que mostraré a continuación son hechos en astro, pero se pueden adaptar al uso de cualquier framework que trabaje sobre HTML.
 
 ```astro
 ---
+// /layouts/layout.astro
 export type Props = {
 	title : string;
 	description : string;
@@ -46,8 +52,6 @@ export type Props = {
 
 const { title, description } = Astro.props;
 ---
-<!-- /layouts/layout.astro -->
-
 <!doctype html>
 <html lang="es">
 	<head>
@@ -97,65 +101,48 @@ const { title, description } = Astro.props;
 </style>
 ```
 
-Astro es un framework que permite organizar fragmentos de HTML (componentes) según su funcion. En este caso, este "componente" representa el layout general que todas las páginas van a usar. Astro permite pasar valores de variables al HTML y recibir valores como "propiedades" desde un componente padre.
+*Aclarción rápida sobre los componentes en Astro:* Este "componente" recibe como propiedades el titulo y la descripción y renderiza la cabezera `<head>` con los valores correspondientes. Si no usas componentes en tu proyecto y escribes el código de forma manual, es el equivalente a pegar en cada página `.html` que tengas y cambiar los valores por aquellos correspondientes.
 
-Este "componente" recibe como propiedades el titulo y la descripción y renderiza la cabezera `<head>` con los valores correspondientes. Si no usas componentes en tu proyecto y escribes el código de forma manual, es el equivalente a pegar en cada página `.html` que tengas y cambiar los valores por aquellos correspondientes. Sin embargo, eso no es lo importante de esta sección.
-
-Lo importante son las **variables de css** que estan en la etiqueta `<style>` (_si trabajas con vanilla html, puedes mover la etiqueta_ `<style>` _y su contenido a la cabezera_ `<head>` _o dentro del cuerpo_ `<body>`). 
+Lo importante de esta sección son las **variables de css** que estan en la etiqueta `<style>` (*si trabajas con vanilla html, puedes mover la etiqueta* `<style>` *y su contenido a la cabezera* `<head>` *o dentro del cuerpo* `<body>`). 
 
 ```html
 <!-- /index.html, /about-us.html, ...  -->
 <!doctype html>
 <html lang="es">
 	<head>
-		<!-- ... -->
-
 		<title>TU TITULO</title>
 		<meta name="title" content="TU TITULO" />
 		<meta name="description" content="TU DESCRIPCIÓN" />
 
-		<style>
-			/* ... */
-		</style>
+		<style>/* mueve aquí tu código CSS */</style>
 	</head>
 	<body>
-		<!-- tu contenido -->
+		<!-- ... -->
 	</body>
 </html>
 ```
 
-Es importante que el código este definido cerca a la raiz de tu página (o proyecto si decides separarlo e importarlo) para que sepas donde buscar en caso quieras refactorizar y no se sientan vinculadas o relacionadas con algún componente o parte especifica dentro de la organización de tu proyecto. Además, estas varaibles deben estar definidas en el `:root`, `html` o `body` para que absolutamente todas los elementos hereden estas propiedas. 
-
+Es importante que el código este definido cerca a la raiz de tu página (o proyecto si decides separarlo e importarlo) para que sepas donde buscar en caso quieras refactorizar y no se sientan vinculadas o relacionadas con algún componente o parte especifica dentro de la organización de tu proyecto. Además, estas varaibles deben estar definidas en el `:root`, `html` o `body` para que todos los elementos hereden estas variables.
 
 ### Organización de colores
 
-Puedes tener cuantos colores desees en tu página siempre y cuando estos sigan una relación armoniosa y una relación jerarquica. De esta manera, puedes tener organizar tu contenido creando una sensación de jerarquía basada en tamaños y **colores**.
-
-<div class="snippet">
-	<ul>
-		<li style="color: var(--hierarchy-s)">Este es un texto con una relevancia diferente al resto</li>
-		<li style="color: var(--hierarchy-0)">Este es un texto con una relevancia diferente al resto</li>
-		<li style="color: var(--hierarchy-1)">Este es un texto con una relevancia diferente al resto</li>
-		<li style="color: var(--hierarchy-2)">Este es un texto con una relevancia diferente al resto</li>
-		<li style="color: var(--hierarchy-3)">Este es un texto con una relevancia diferente al resto</li>
-	</ul>
-</div>
+Puedes tener cuantos colores desees en tu página siempre y cuando estos sigan una relación armoniosa y una relación jerarquica. Para este ejemplo, he definido aquellos orientados a la jerarquía del texto y los colores de los elementos UI para que, ee esta manera, se pueda organizar el contenido creando una sensación de jerarquía basada en **colores** (también puedes usar tamaños para crear esta ilusión de ordenar la relevancia visual).
 
 ```html
 <ul>
-	<li style="color: var(--hierarchy-s)">Este es un texto con una relevancia diferente al resto</li>
-	<li style="color: var(--hierarchy-0)">Este es un texto con una relevancia diferente al resto</li>
-	<li style="color: var(--hierarchy-1)">Este es un texto con una relevancia diferente al resto</li>
-	<li style="color: var(--hierarchy-2)">Este es un texto con una relevancia diferente al resto</li>
-	<li style="color: var(--hierarchy-3)">Este es un texto con una relevancia diferente al resto</li>
+	<li style="color: var(--hierarchy-s)">Este es un texto con máxima importancia</li>
+	<li style="color: var(--hierarchy-0)">Este es un texto normal</li>
+	<li style="color: var(--hierarchy-1)">Este es un texto con una relevancia leve</li>
+	<li style="color: var(--hierarchy-2)">Este es un texto con una relevancia inferior al resto</li>
+	<li style="color: var(--hierarchy-3)">Este es un texto sin relevancia y poco visible</li>
 </ul>
 ```
 
-Claro que los colores no son solo para el texto, sino para cualquier elemento que pueda o deba llamar la atención del usuario, como el `<footer>` y el `<header>`. es por ello que se definen tantas variables. 
+Claro que los colores no son solo para el texto, sino para cualquier elemento que pueda o deba llamar la atención del usuario, como el `<footer>` y el `<header>`. Como consejo general, yo sugiero tener un minimo de variables definidas, que son: 
 
 - `--hierarchy-...` representan elementos de texto o UI. Sirven para evita que multiples elementos compitan por la atención del usuario.
-- `--bg-body` representa el color del fondo, util para generar la impresión que ciertos elementos son transparentes.
-- `--panel-color` representa el color de los "controles" generales, que son el `<header>` y `<footer>` y cualquier otro elemento en pantalla que tenga el mismo nivel de relevancia. Sin embargo, debe usarse con cuidado.
+- `--bg-body` representa el color del fondo, y también es útil para generar la impresión que ciertos elementos son transparentes.
+- `--panel-color` representa el color de los "controles" generales, que son el `<header>` y `<footer>` y cualquier otro elemento en pantalla que tenga el mismo nivel de relevancia. Debe usarse al mínimo.
 - `--block-color` representa el color de cualquier elemento o bloque que agrupe información, como un `<article>`, y desee destacar del fondo, pero no tanto como los mismos "controles" generales.
 
 Al texto general se le asigna el color `--hierarchy-0`, el cual es el base. Es importante que este color no sea `#000`, pues entonces no habrá nunca un color más relevante que este. Además, usar valores absolutos como `black` o `white` no es una buena idea en general.
@@ -177,7 +164,6 @@ body { font-family: var(--fnt-general); }
 
 code { font-family: var(--fnt-monospc);	 }
 ```
-
 
 ## Un layout accesible
 

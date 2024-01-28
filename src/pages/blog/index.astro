@@ -8,6 +8,7 @@ import { getCollection } from 'astro:content';
 
 import Time from '../../components/Time.astro';
 import Icons from '../../fragments/Icons.astro';
+import { Image } from 'astro:assets';
 
 const posts = (await getCollection('blog')).sort((a, b) => a.data.datePub.valueOf() - b.data.datePub.valueOf());
 
@@ -24,10 +25,12 @@ const s_postImg = [64,64];
 			<section>
 				<ul class="ul-post-list">{
 					posts.map((p, i) => <li>
-						<article class="article-post-card">
+						<article class="article-post-card" data-index={i}>
 							<div>
-								<img style="display: block; width: 100%; height: auto; aspect-ratio: 1.25; object-fit: cover;" src={`https://images.placeholders.dev/?width=${s_postImg[0]}&height=${s_postImg[1]}`} width={s_postImg[0]} height={s_postImg[1]} alt=""/>	
-								<img style="display: block; position: absolute; top: 50%; left: 50%; translate: -50% -50%; border-radius: 50%; border: 1px solid black;" src={`https://images.placeholders.dev/?width=${s_postImg[0]}&height=${s_postImg[1]}`} width={s_postImg[0]} height={s_postImg[1]} alt=""/>		
+								{p.data.thumbnail ? 
+									(<Image style="display: block; width: 100%; height: auto; aspect-ratio: 1.25; object-fit: cover;" width={480} height={360} src={p.data.thumbnail?.img} alt={p.data.thumbnail?.alt} />) :
+									(<img 	style="display: block; width: 100%; height: auto; aspect-ratio: 1.25; object-fit: cover;" width={480} height={360} src={`https://images.placeholders.dev/?width=${s_postImg[0]}&height=${s_postImg[1]}`} width={s_postImg[0]} height={s_postImg[1]} alt=""/>)
+								}
 							</div>
 
 							<div>
@@ -48,11 +51,11 @@ const s_postImg = [64,64];
 									<h3>{p.data.title}</h3>
 									<Time date={p.data.datePub}/>
 								</header>
-								<p class="block-post-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi ipsam odit, delectus molestias at ab dicta quo iusto nesciunt reprehenderit illo dolorum soluta et quas consequatur? Doloribus sequi nulla nisi?</p>
-								
-								<div style="text-align: center; margin-top: 2.5rem">
-									<a class="link-post-cta" href={`/blog/${p.slug}`}>Leer más</a>	
-								</div>
+								<p class="block-post-desc" set:text={p.data.desc}></p>
+							</div>
+
+							<div style="text-align: center;">
+								<a class="link-post-cta" href={`/blog/${p.slug}`}>Leer más</a>	
 							</div>
 						</article>
 					</li>)
@@ -75,20 +78,33 @@ const s_postImg = [64,64];
 		}
 		& > li {
 			display: block;
+			box-shadow: 0 .25rem .75rem -.125rem #0126;
 		}
 	}
 
 	article.article-post-card {
 		& {
 			background-color: var(--block-color);
+			border: 1px solid var(--panel-color);
+			height: 100%;
+			position: relative;
+			display: flex;
+			flex-direction: column;
 		}
 
-		& > :first-child {
+		& > :nth-child(1) {
+			position: relative;
+			flex : 0 0 auto;
+		}
+
+		& > :nth-child(2) {
+			padding: .5rem;
+			flex : 1 0 auto;
 			position: relative;
 		}
 
-		& > :last-child {
-			padding: .5rem;;
+		& > :nth-child(3) {
+			padding: .5rem;
 		}
 
 		& header {
@@ -115,7 +131,6 @@ const s_postImg = [64,64];
 			font-size : 14px;
 			color: var(--hierarchy-0);
 			line-height: 1.25;
-			max-height: calc(1.25 * 1em * 4);
 			overflow: clip;
 		}
 
