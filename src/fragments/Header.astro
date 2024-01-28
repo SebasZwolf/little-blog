@@ -1,6 +1,8 @@
 ---
 import { screen_themes } from '../util/const'
 
+const base = import.meta.env.BASE_URL;
+
 type link = {
 	label: string;
 	href?: string;
@@ -76,7 +78,7 @@ const home_links: link[] = [
 										</label>
 										{renderlinks(e.nested, level + 1)}
 									</li>) :
-									(<li><a href={e.href}> {e.label} </a></li>) 
+									(<li><a href={base + e.href}> {e.label} </a></li>) 
 								)}
 								
 								<script is:inline define:vars={{ level }}>
