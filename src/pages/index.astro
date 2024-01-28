@@ -17,11 +17,13 @@ const s_postImg = 96;
 
 const posts = await getCollection('blog').then(ps => ps.sort((a, b) => a.data.datePub.valueOf() - b.data.datePub.valueOf()));
 
+const base = import.meta.env.BASE_URL;
+
 ---
 
 <Layout {...{ title, description }}>
 	<Fragment slot="head">
-		<OpenGraph {...{title, description, image : 'public/favicon.svg' }}/>
+		<OpenGraph {...{title, description, image : base + '/public/favicon.svg' }}/>
 	</Fragment>
 	<Fragment>
 		<Content>
@@ -63,7 +65,7 @@ const posts = await getCollection('blog').then(ps => ps.sort((a, b) => a.data.da
 				<header style="margin-block: 1em">
 					<h2 style="margin-bottom: 0;">Últimos Articulos</h2>
 					<small style="color: var(--hierarchy-1)"
-						><a href="/blog">ver todos</a></small
+						><a href={base + "/blog"}>ver todos</a></small
 					>
 				</header>
 
@@ -71,7 +73,7 @@ const posts = await getCollection('blog').then(ps => ps.sort((a, b) => a.data.da
 					{
 						posts.map(p => (
 							<li>
-								<a href={`/blog/${p.slug}`}>
+								<a href={base + `/blog/${p.slug}`}>
 									<article class="article-post-card-lite" style={`--img-size: ${s_postImg}px`}>
 										<picture style="height: 100%; border-radius: 50%;">
 											{p.data.thumbnail && <Image
