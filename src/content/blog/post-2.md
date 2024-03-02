@@ -1,7 +1,8 @@
 ---
 title: "Preparación básica: Semántica para entender TÚ código"
 desc: "Recomendaciones generales del uso de semántica y sus beneficios para incrementar la legibilidad del código."
-datePub: '2022-07-08T05:00:00.000Z'
+datePub: 2024-03-01T00:00:00-05:00
+
 thumbnail:
  img :  '/post-2.thumbnail.webp'
  alt : 'comparación de un layouy confuso usando divs y uno descriptivo usando elementos semánticos'

@@ -4,7 +4,7 @@ desc: "Aplicar de forma inteligente los fundamentos de BEM en una propuesta para
 thumbnail:
  img :  '/post-3.thumbnail.webp'
  alt : 'Ejemplo de análisis BEM a un articulo-carta de usuario mostrando Bloques, Elementos y Modificadores'
-datePub: '2022-07-08T05:00:00.000Z'
+datePub: 2024-03-01T00:00:00-05:00
 tags:
   - css3
   - html5

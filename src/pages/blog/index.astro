@@ -2,7 +2,6 @@
 import OpenGraph from '../../fragments/OpenGraph.astro';
 import Layout from '../../layouts/index.astro'
 import Content from '../../layouts/content.astro'
-import { SITE_TITLE as title, SITE_DESCRIPTION as description } from '../../util/const';
 
 import { getCollection } from 'astro:content';
 
@@ -15,10 +14,14 @@ const base = import.meta.env.BASE_URL;
 const posts = (await getCollection('blog')).sort((a, b) => a.data.datePub.valueOf() - b.data.datePub.valueOf());
 
 const s_postImg = [64,64];
+
+const
+	title="Blog oficial - Sebaz's blog",
+	description="Lista de todos los artículos escritos y publicados hasta la fecha."
 ---
-<Layout {...{title, description}}>
+<Layout {title} {description}>
 	<Fragment slot="head">
-		<OpenGraph {...{title, description, image : 'public/favicon.svg' }}/>
+		<OpenGraph {title} {description} image={'public/favicon.svg' }/>
 	</Fragment>
 	<Fragment>
 		<Content>

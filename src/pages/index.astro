@@ -15,37 +15,39 @@ import Icons from "../fragments/Icons.astro";
 
 const s_postImg = 96;
 
-const posts = await getCollection('blog').then(ps => ps.sort((a, b) => a.data.datePub.valueOf() - b.data.datePub.valueOf()));
+const posts = await getCollection("blog").then((ps) =>
+	ps.sort((a, b) => a.data.datePub.valueOf() - b.data.datePub.valueOf()),
+);
 
 const base = import.meta.env.BASE_URL;
-
 ---
 
-<Layout {...{ title, description }}>
+<Layout {title} {description}>
 	<Fragment slot="head">
-		<OpenGraph {...{title, description, image : base + '/public/favicon.svg' }}/>
+		<OpenGraph
+			{...{ title, description, image: base + "/public/favicon.svg" }}
+		/>
 	</Fragment>
 	<Fragment>
 		<Content>
 			<header style="margin-block: 1em;">
 				<h1>Hola, soy Sebas</h1>
 			</header>
-			<Icons/>
+			<Icons />
 			<section style="margin-block: 0 2.5rem">
 				<header style="margin-block: 1em;">
 					<h2>Y este es mi blog</h2>
 				</header>
 				<p style="max-width: 72ch;">
-					Mi nombre es Sebastian Rodríguez y mi numero favorito es el doce,<i> de
-					ahí mi nombre Zwölf (que es 12 en alemán)</i>. Creé este blog para 
-					enseñar como a desarrollar páginas web usando trucos y practicas que
-					aprendí a lo largo del tiempo.
+					Mi nombre es Sebastian Rodríguez. Creé este blog para enseñar como a
+					desarrollar páginas web usando trucos y practicas que aprendí a lo
+					largo del tiempo.
 				</p>
 				<p style="max-width: 72ch;">
-					Aquí aprenderas como crear elementos de UI que siempre son un dolor de
-					cabeza al momento de empezar un nuevo proyecto, así como la forma en
-					la que yo organizo mi código para mayor facilidad al leer, consumir y
-					refactorizar.
+					Aquí aprenderas como crear elementos de UI básicos, como crear
+					layouts, componentes y otras estructuras usando principalmente CSS,
+					así como la forma en la que organizo mi código para mayor facilidad al
+					leer, consumir y refactorizar.
 				</p>
 				<p style="max-width: 72ch;">
 					Los frameworks que yo uso principalmente son Astro, Vue y Tailwind,
@@ -54,10 +56,8 @@ const base = import.meta.env.BASE_URL;
 					objetivo es aprovechar al máximo las herramientas del vanilla css.
 				</p>
 				<p style="max-width: 72ch;">
-					Los frameworks que yo uso principalmente son Astro, Vue y Tailwind,
-					pero para la mayoria de guias que verás aquí, lo más importante es
-					limitar el uso de javascript al minimo y aprovechar al máximo las
-					herramientas del vanilla css.
+					Dentro de estos tutoriales explicaré también como puedes crear un blog
+					como este.
 				</p>
 			</section>
 
@@ -71,33 +71,39 @@ const base = import.meta.env.BASE_URL;
 
 				<ul class="ul-post-list-lite">
 					{
-						posts.map(p => (
+						posts.map((p) => (
 							<li>
 								<a href={base + `/blog/${p.slug}`}>
-									<article class="article-post-card-lite" style={`--img-size: ${s_postImg}px`}>
+									<article
+										class="article-post-card-lite"
+										style={`--img-size: ${s_postImg}px`}
+									>
 										<picture style="height: 100%; border-radius: 50%;">
-											{p.data.thumbnail && <Image
-												style="display: block; overflow: hidden; width: 100%; height: 100%; object-fit: cover;"
-												src={p.data.thumbnail?.img}
-												alt={p.data.thumbnail?.alt}
-												width={s_postImg}
-												height={s_postImg}
-											/>}
+											{p.data.thumbnail && (
+												<Image
+													style="display: block; overflow: hidden; width: 100%; height: 100%; object-fit: cover;"
+													src={p.data.thumbnail?.img}
+													alt={p.data.thumbnail?.alt}
+													width={s_postImg}
+													height={s_postImg}
+												/>
+											)}
 										</picture>
 
 										<header>
 											<div style="margin-block: .5rem;">
-												<ul class="ul-tag-list-lite">{
-													p.data.tags.map(t => (
-													<li style={`--icon-color : ${t[1].color}`}>
-														<svg viewBox="0 -1 24 24"><use href={`#icon-tag-${t[0]}`}/></svg>
-														<div>
-															<span>
-																{t[1].label}
-															</span>
-														</div>
-													</li>))
-												}</ul>
+												<ul class="ul-tag-list-lite">
+													{p.data.tags.map((t) => (
+														<li style={`--icon-color : ${t[1].color}`}>
+															<svg viewBox="0 -1 24 24">
+																<use href={`#icon-tag-${t[0]}`} />
+															</svg>
+															<div>
+																<span>{t[1].label}</span>
+															</div>
+														</li>
+													))}
+												</ul>
 											</div>
 											<h3>{p.data.title}</h3>
 											<Time date={p.data.datePub} format={{ month: "long" }} />
@@ -141,7 +147,9 @@ const base = import.meta.env.BASE_URL;
 			gap: 0.75rem;
 			align-items: center;
 		}
-		&:hover { background-color: var(--hierarchy-3); }
+		&:hover {
+			background-color: var(--hierarchy-3);
+		}
 
 		& > picture {
 			grid-area: picture;
@@ -175,16 +183,20 @@ const base = import.meta.env.BASE_URL;
 				display: flex;
 				padding: 0;
 				list-style: none;
-				gap: .25rem;
-				margin-bottom: .5rem;
+				gap: 0.25rem;
+				margin-bottom: 0.5rem;
 			}
 
 			& > li {
 				line-height: 1;
-				color: var(--hierarchy-s);	
-				padding: .25rem;
-				background-color: color-mix(in srgb, var(--icon-color), transparent 50%);
-				
+				color: var(--hierarchy-s);
+				padding: 0.25rem;
+				background-color: color-mix(
+					in srgb,
+					var(--icon-color),
+					transparent 50%
+				);
+
 				border-radius: 100vw;
 				font-size: small;
 
@@ -198,13 +210,15 @@ const base = import.meta.env.BASE_URL;
 
 			& > li > div {
 				display: grid;
-				transition: grid-template-columns .3s, padding-right .3s;
+				transition:
+					grid-template-columns 0.3s,
+					padding-right 0.3s;
 				grid-template-columns: 0fr;
 				overflow: hidden;
 			}
 			& > li:hover > div {
 				grid-template-columns: 1fr;
-				padding-right: .25rem;
+				padding-right: 0.25rem;
 			}
 			& > li > div > span {
 				overflow: hidden;
@@ -212,6 +226,5 @@ const base = import.meta.env.BASE_URL;
 				text-transform: lowercase;
 			}
 		}
-
 	}
 </style>

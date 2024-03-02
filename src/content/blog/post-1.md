@@ -1,7 +1,7 @@
 ---
 title: 'Preparación básica: diseñar la "identidad"'
 desc: 'Una propuesta de solución para manejar variables CSS y crear una paleta general de colores que representen una jerarquía.'
-datePub: '2022-07-08T05:00:00.000Z'
+datePub: 2024-03-01T00:00:00-05:00
 thumbnail:
  img :  '/post-1.thumbnail.png'
  alt : 'Ejemplo en código de la definición de variables CSS usando el template recomendado'

@@ -1,4 +1,4 @@
-export const SITE_TITLE = 'Sebasz Blog';
+export const SITE_TITLE = 'Sebaz\' Blog';
 export const SITE_DESCRIPTION = 'Blog de desarrollo de front end, guias simples de solución a problemas tipicos de desarrollo front end para principantes!';
 
 export const screen_themes = {
