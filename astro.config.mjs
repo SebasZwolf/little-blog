@@ -2,10 +2,9 @@ import { defineConfig } from 'astro/config';
 
 import sitemap from '@astrojs/sitemap';
 
-// https://astro.build/config
 export default defineConfig({
-	site: 'https://SebasZwolf.github.io',
-	base : '/little-blog',
+	site: process.env.URL ?? 'https://SebasZwolf.github.io',
+	base : process.env.BASE ?? '/',
 	integrations: [
 		sitemap()
 	],
