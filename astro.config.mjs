@@ -3,8 +3,8 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-	site: process.env.URL ?? 'https://SebasZwolf.github.io',
-	base : process.env.BASE ?? '/',
+	site : process.env.URL ?? 'https://SebasZwolf.github.io',
+	base : process.env.BASE,
 	integrations: [
 		sitemap()
 	],

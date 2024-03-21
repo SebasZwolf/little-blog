@@ -3,6 +3,9 @@ import Layout from '../layouts/index.astro'
 ---
 
 <Layout description='test site' title='test'>
+	<Fragment slot="meta">
+		<meta name="robots" content="noindex">
+	</Fragment>
 	<p>{ import.meta.env.BASE_URL }</p>
 	<p>{ import.meta.env.SITE }</p>
 </Layout>

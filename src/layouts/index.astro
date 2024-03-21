@@ -24,7 +24,7 @@ const { title, description } = Astro.props;
 
 		<slot name="meta" />
 
-		<script define:vars={{ screen_themes }}>
+		<script is:inline define:vars={{ screen_themes }}>
 			(function(){
 				const theme = localStorage?.getItem("theme") ? 
 					localStorage.getItem("theme") : window.matchMedia("(prefers-color-scheme: dark)").matches? 
