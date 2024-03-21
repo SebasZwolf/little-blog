@@ -8,4 +8,7 @@ import Layout from '../layouts/index.astro'
 	</Fragment>
 	<p>{ import.meta.env.BASE_URL }</p>
 	<p>{ import.meta.env.SITE }</p>
+	<p>{ new URL(Astro.url.pathname, Astro.site) }</p>
+	<p>{ Astro.url }</p>
+	<p>{ Astro.url.pathname }</p>
 </Layout>
