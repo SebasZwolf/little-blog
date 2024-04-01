@@ -97,7 +97,7 @@ const config = {
   <body>
     <!-- Include the script that builds the page and powers Static CMS -->
     <script  is:inline src={`https://unpkg.com/@staticcms/app@${static_version}/dist/static-cms-app.js`} />
-    <script is:inline lang="javascript" define:vars={{ config }}>
+    <script is:inline define:vars={{ config }}>
       CMS.init({ config });
       
     </script>
